@@ -36,7 +36,7 @@ public class JavaMongoApplication {
 	      MongoCredential credential; 
 	      credential = MongoCredential.createCredential("user", "paises_db", 
 	         "password".toCharArray()); 
-	      System.out.println("Connected to the database successfully");  
+	      System.out.println("Conexion con la base de datos exitosa");  
 	      
 	      // Accede a la base de datos 
 	      MongoDatabase database = mongo.getDatabase("paises"); 
@@ -49,7 +49,7 @@ public class JavaMongoApplication {
 	  	  String hola = "";
 	  	  
 	  	MongoCollection<Document> collection = database.getCollection("paises");
-	  	System.out.println("Collection sampleCollection selected successfully");
+	  	System.out.println("Coleccion paises obtenida correctamente");
 	      
 	     
 	      //recorre las 300 direcciones
@@ -83,6 +83,12 @@ public class JavaMongoApplication {
 	  		}
 	      
 	      System.out.println("300 Calling code recorridos");
+	  	
+	  	
+	  	
+	  	
+	  	
+	  	
 	      
     }
 	
