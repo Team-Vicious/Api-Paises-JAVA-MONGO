@@ -39,8 +39,8 @@ public class JavaMongoApplication {
 	      System.out.println("Conexion con la base de datos exitosa");  
 	      
 	      // Accede a la base de datos 
-	      MongoDatabase database = mongo.getDatabase("paises"); 
-	      System.out.println("Credentials ::"+ credential);  
+	      MongoDatabase database = mongo.getDatabase("paises_db"); 
+	      System.out.println("Credenciales ::"+ credential);  
 	      
 	      JSONParser parser = new JSONParser();
 	      
@@ -85,7 +85,7 @@ public class JavaMongoApplication {
 	      System.out.println("300 Calling code recorridos");
 	  	
 	  	
-	  	
+	  	collection.find(eq("nombrePais"));
 	  	
 	  	
 	  	
