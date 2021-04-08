@@ -6,25 +6,30 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.bson.Document;
 
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
-
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.example.demo.MetodosMongo;
 
 @SpringBootApplication
-public class JavaMongoApplication {
+public class JavaMongoApplication extends MetodosMongo{
 
 	public static void main(String[] args) throws ParseException {
 		SpringApplication.run(JavaMongoApplication.class, args);
@@ -84,10 +89,11 @@ public class JavaMongoApplication {
 	      
 	      System.out.println("300 Calling code recorridos");
 	  	
+	  	String region= "Africa";
 	  	
-	  	collection.find(eq("nombrePais"));
 	  	
-	  	
+	  
+	
 	  	
 	      
     }
