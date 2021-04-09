@@ -13,7 +13,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-
+import com.mongodb.client.model.Filters;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,12 +26,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.example.demo.MetodosMongo;
 
 @SpringBootApplication
-public class JavaMongoApplication extends MetodosMongo{
+public class JavaMongoApplication {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws ParseException{
 		SpringApplication.run(JavaMongoApplication.class, args);
 	
 		// Crea un cliente mongo 
@@ -47,31 +46,37 @@ public class JavaMongoApplication extends MetodosMongo{
 	      MongoDatabase database = mongo.getDatabase("paises_db"); 
 	      System.out.println("Credenciales ::"+ credential);  
 	      
-	      JSONParser parser = new JSONParser();
+	      MongoCollection<Document> collection = database.getCollection("paises");
+		  System.out.println("Coleccion paises obtenida correctamente");
 	      
-	      String url;
+	      String url = "https://restcountries.eu/rest/v2/callingcode/";
 			
-	  	  String hola = "";
+	  	  String contenido = "";
+	  	
+	  	  cargarDatos(contenido, url, collection);
 	  	  
-	  	MongoCollection<Document> collection = database.getCollection("paises");
-	  	System.out.println("Coleccion paises obtenida correctamente");
 	      
-	     
-	      //recorre las 300 direcciones
+    }
+	
+	public static void cargarDatos(String contenido, String url, MongoCollection<Document> collection) throws ParseException {
+		
+		JSONParser parser = new JSONParser();
+		
+		 //recorre las 300 direcciones
 	      for(int i= 1; i<301; i++) {
+	  			  
+	    
+	  		contenido = peticionHttpGet(url+i);
 	  		
-	  		url = "https://restcountries.eu/rest/v2/callingcode/"+i;
-	  		hola = peticionHttpGet(url);
-	  		
-	  		if(hola != null) {
+	  		if(contenido != null) {
 	  		
 	  		//pasamos a json 
-	  		JSONArray jsonArray = (JSONArray) parser.parse(hola);
+	  		JSONArray jsonArray = (JSONArray) parser.parse(contenido);
 		  	JSONObject json = (JSONObject) jsonArray.get(0);
 		    JSONArray jsonArray2 = (JSONArray) json.get("callingCodes");
 		    JSONArray jsonArray3 = (JSONArray) json.get("latlng");
 
-	  		
+	  		//Guarda en un documento los atributos
 	  		Document document = new Document("nombrePais", json.get("name"))
 	  		.append("capitalPais", json.get("capital"))
 	  		.append("region", json.get("region"))
@@ -79,24 +84,20 @@ public class JavaMongoApplication extends MetodosMongo{
 	  		.append("latitud", jsonArray3.get(0))
 	  		.append("longitud", jsonArray3.get(1))
 	  		.append("codigoPais", jsonArray2.get(0));
-	  		
+	
 	  		//Insertar documento en la colleccion
 	  		collection.insertOne(document);
-	  		System.out.println("Pais número "+i+" Agregado");      
 	  		
-	  		}
-	  		}
+	  		System.out.println("Pais número "+i+" Agregado");   
+	  		
+	  		} } 
 	      
 	      System.out.println("300 Calling code recorridos");
 	  	
-	  	String region= "Africa";
-	  	
-	  	
-	  
+	}
 	
-	  	
-	      
-    }
+	
+
 	
 	//metodo para visitar una url
 	public static String peticionHttpGet(String urlParaVisitar) {
